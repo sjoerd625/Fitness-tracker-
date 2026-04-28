@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="100 Dagen" />
+  <title>100 Dagen Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #080810; }
+    body { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+```
+const STORAGE_KEY = "fitness_tracker_data_v1";
+
+const INITIAL_DATA = [
+  { day: 1, date: "2026-04-28", exercises: [{ type: "PU", amount: 9, variant: "knieën" }, { type: "S", amount: 90, variant: "normaal" }] }
+];
+
+const EXERCISES = [
+  { key: "PU", label: "Push-ups", icon: "💪", unit: "reps", hasVariant: true },
+  { key: "S",  label: "Squats",   icon: "🦵", unit: "reps", hasVariant: false },
+  { key: "PL", label: "Plank",    icon: "🧘", unit: "sec",  hasVariant: false },
+];
+
+const QUICK_AMOUNTS = [5, 10, 15, 20, 25, 30, 40, 50, 60, 90, 100, 120];
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return INITIAL_DATA;
+}
+
+function saveData(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function getStats(data, type) {
+  const dayTotals = data.map(d => ({
+    day: d.day,
+    total: d.exercises.filter(e => e.type === type).reduce((s, e) => s + e.amount, 0)
+  })).filter(d => d.total > 0);
+  if (dayTotals.length === 0) return null;
+  const amounts = dayTotals.map(d => d.total);
+  const today = amounts[amounts.length - 1];
+  const yesterday = amounts.length > 1 ? amounts[amounts.length - 2] : null;
+  const first = amounts[0];
+  const avg = Math.round(amounts.reduce((a, b) => a + b, 0) / amounts.length);
+  const vsDayBefore = yesterday !== null ? Math.round(((today - yesterday) / yesterday) * 100) : null;
+  const vsFirst = amounts.length > 1 ? Math.round(((today - first) / first) * 100) : null;
+  return { today, yesterday, first, avg, vsDayBefore, vsFirst, total: amounts.reduce((a, b) => a + b, 0), dayTotals };
+}
+
+function SwipeDeleteConfirm({ entry, onConfirm, onCancel }) {
+  const [swipeX, setSwipeX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const confirmed = swipeX > 220;
+  const ex = EXERCISES.find(x => x.key === entry.type);
+
+  function onPointerDown(e) { setDragging(true); setStartX(e.clientX); e.currentTarget.setPointerCapture(e.pointerId); }
+  function onPointerMove(e) { if (!dragging) return; const dx = Math.max(0, Math.min(260, e.clientX - startX)); setSwipeX(dx); }
+  function onPointerUp() {
+    setDragging(false);
+    if (swipeX > 220) onConfirm();
+    else setSwipeX(0);
+  }
+
+  return (
+    <div style={{ background: "#1a0808", border: "1px solid #3a1010", borderRadius: "8px", padding: "16px", marginBottom: "10px" }}>
+      <div style={{ fontSize: "10px", color: "#f87171", letterSpacing: "2px", marginBottom: "10px" }}>
+        ⚠️ VERWIJDEREN: {ex?.icon} {entry.amount}{ex?.unit === "sec" ? "s" : ""} {ex?.label}{entry.variant !== "normaal" ? ` (${entry.variant})` : ""}
+      </div>
+      <div style={{ fontSize: "11px", color: "#666", marginBottom: "14px" }}>Swipe naar rechts om te bevestigen</div>
+      <div style={{ position: "relative", height: "48px", background: "#120808", borderRadius: "6px", overflow: "hidden", userSelect: "none" }}>
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${swipeX + 48}px`, background: confirmed ? "rgba(248,113,113,0.3)" : "rgba(248,113,113,0.1)", transition: dragging ? "none" : "all 0.3s", borderRadius: "6px" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: confirmed ? "#f87171" : "#444", letterSpacing: "1px", pointerEvents: "none" }}>
+          {confirmed ? "LOS MAAR! 🗑️" : "→ →  VERWIJDER  → →"}
+        </div>
+        <div
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          style={{
+            position: "absolute", left: `${swipeX}px`, top: "4px", bottom: "4px", width: "44px",
+            background: confirmed ? "#f87171" : "#2a1010", border: `1px solid ${confirmed ? "#f87171" : "#3a1515"}`,
+            borderRadius: "4px", cursor: "grab", display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "18px", transition: dragging ? "none" : "left 0.3s", touchAction: "none",
+            boxShadow: confirmed ? "0 0 12px rgba(248,113,113,0.5)" : "none"
+          }}
+        >🗑️</div>
+      </div>
+      <button onClick={onCancel} style={{ marginTop: "12px", background: "none", border: "none", color: "#444", fontSize: "11px", cursor: "pointer", fontFamily: "'Space Mono', monospace" }}>
+        ← annuleren
+      </button>
+    </div>
+  );
+}
+
+function FitnessTracker() {
+  const [data, setData] = useState(() => loadData());
+  const [screen, setScreen] = useState("home");
+  const [selectedEx, setSelectedEx] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState("normaal");
+  const [customAmount, setCustomAmount] = useState("");
+  const [activeTab, setActiveTab] = useState("PU");
+  const [toast, setToast] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => { saveData(data); }, [data]);
+
+  const currentDay = data.length > 0 ? data[data.length - 1].day : 0;
+
+  function showToast(msg) {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  }
+
+  function commitEntry(amount) {
+    const today = new Date().toISOString().split("T")[0];
+    const lastEntry = data[data.length - 1];
+    const isToday = lastEntry && lastEntry.date === today;
+    const entry = { type: selectedEx.key, amount, variant: selectedVariant };
+    if (isToday) {
+      setData(prev => prev.map((d, i) => i === prev.length - 1 ? { ...d, exercises: [...d.exercises, entry] } : d));
+    } else {
+      setData(prev => [...prev, { day: currentDay + 1, date: today, exercises: [entry] }]);
+    }
+    showToast(`✓ ${amount}${selectedEx.unit === "sec" ? "s" : ""} ${selectedEx.label} opgeslagen!`);
+    setScreen("home");
+    setCustomAmount("");
+    setSelectedVariant("normaal");
+  }
+
+  function deleteEntry(dayIndex, exIndex) {
+    setData(prev => {
+      const newData = prev.map((d, di) => {
+        if (di !== dayIndex) return d;
+        const newExercises = d.exercises.filter((_, ei) => ei !== exIndex);
+        return { ...d, exercises: newExercises };
+      }).filter(d => d.exercises.length > 0);
+      return newData;
+    });
+    setDeleteTarget(null);
+    showToast("🗑️ Score verwijderd");
+  }
+
+  const stats = getStats(data, activeTab);
+  const exInfo = EXERCISES.find(e => e.key === activeTab);
+
+  const todayEntries = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const todayData = data.find(d => d.date === today);
+    return todayData ? todayData.exercises : [];
+  }, [data]);
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#080810", color: "#ddd8ce", fontFamily: "'Space Mono', monospace", maxWidth: "480px", margin: "0 auto", position: "relative", paddingTop: "env(safe-area-inset-top)" }}>
+      <style>{`
+        * { box-sizing: border-box; }
+        .quick-btn { background: #12121e; border: 1px solid #1e1e2e; color: #ddd8ce; padding: 16px 0; font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 400; cursor: pointer; border-radius: 4px; transition: all 0.12s; width: 100%; }
+        .quick-btn:active { transform: scale(0.94); background: #1a1a2e; border-color: #e8c840; color: #e8c840; }
+        .ex-card { background: #10101a; border: 1px solid #1c1c2c; padding: 20px 18px; cursor: pointer; border-radius: 8px; transition: all 0.15s; display: flex; align-items: center; gap: 16px; }
+        .ex-card:active { border-color: #e8c840; background: #14142a; }
+        .tab { background: none; border: none; border-bottom: 2px solid transparent; color: #444; padding: 8px 14px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 10px; transition: all 0.2s; white-space: nowrap; }
+        .tab.active { border-bottom-color: #e8c840; color: #e8c840; }
+        .stat-box { background: #10101a; border: 1px solid #1c1c2c; padding: 14px 10px; border-radius: 6px; text-align: center; }
+        .var-btn { flex: 1; padding: 12px; background: #10101a; border: 1px solid #1e1e2e; color: #555; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; transition: all 0.15s; }
+        .var-btn.active { border-color: #e8c840; color: #e8c840; background: rgba(232,200,64,0.07); }
+        .back-btn { background: none; border: none; color: #444; cursor: pointer; font-size: 12px; font-family: 'Space Mono', monospace; padding: 0; }
+        input[type=number] { background: #10101a; border: 1px solid #2a2a3a; border-bottom: 2px solid #e8c840; color: #e8c840; padding: 14px; font-family: 'Oswald', sans-serif; font-size: 36px; width: 100%; outline: none; text-align: center; border-radius: 4px 4px 0 0; -webkit-appearance: none; }
+        input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+      `}</style>
+
+      {toast && (
+        <div style={{ position: "fixed", top: "calc(16px + env(safe-area-inset-top))", left: "50%", transform: "translateX(-50%)", background: "#0e1f0e", border: "1px solid #4ade80", color: "#4ade80", padding: "10px 20px", borderRadius: "4px", fontSize: "12px", zIndex: 999, whiteSpace: "nowrap" }}>
+          {toast}
+        </div>
+      )}
+
+      {/* HEADER */}
+      <div style={{ padding: "24px 20px 16px", borderBottom: "1px solid #141420" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "30px", fontWeight: 700, color: "#e8c840", letterSpacing: "1px", lineHeight: 1 }}>100 DAGEN</div>
+            <div style={{ fontSize: "9px", color: "#333", letterSpacing: "3px", marginTop: "2px" }}>CHALLENGE TRACKER</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "32px", color: "#ddd8ce", lineHeight: 1 }}>
+              {currentDay}<span style={{ fontSize: "14px", color: "#333" }}>/100</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: "14px", height: "4px", background: "#141420", borderRadius: "2px" }}>
+          <div style={{ height: "100%", width: `${currentDay}%`, background: "linear-gradient(90deg,#e8c840,#ff9f43)", borderRadius: "2px", transition: "width 0.8s ease" }} />
+        </div>
+      </div>
+
+      {/* HOME */}
+      {screen === "home" && (
+        <div style={{ padding: "20px 20px 100px" }}>
+          {todayEntries.length > 0 && (
+            <div style={{ background: "#0c180c", border: "1px solid #1a301a", borderRadius: "6px", padding: "12px 14px", marginBottom: "20px" }}>
+              <div style={{ fontSize: "9px", color: "#4ade80", letterSpacing: "2px", marginBottom: "8px" }}>VANDAAG</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {todayEntries.map((e, i) => {
+                  const ex = EXERCISES.find(x => x.key === e.type);
+                  return (
+                    <span key={i} style={{ background: "rgba(74,222,128,0.08)", border: "1px solid rgba(74,222,128,0.18)", color: "#4ade80", padding: "3px 10px", fontSize: "11px", borderRadius: "3px" }}>
+                      {ex?.icon} {e.amount}{ex?.unit === "sec" ? "s" : ""} {ex?.label}{e.variant !== "normaal" ? ` (${e.variant})` : ""}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          <div style={{ borderBottom: "1px solid #141420", display: "flex", overflowX: "auto", marginBottom: "16px" }}>
+            {EXERCISES.map(e => (
+              <button key={e.key} className={`tab ${activeTab === e.key ? "active" : ""}`} onClick={() => setActiveTab(e.key)}>
+                {e.icon} {e.label}
+              </button>
+            ))}
+          </div>
+
+          {stats ? (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "6px", marginBottom: "10px" }}>
+                {[
+                  { label: "Vandaag", value: `${stats.today}${exInfo?.unit === "sec" ? "s" : ""}` },
+                  { label: "Gemiddeld", value: `${stats.avg}${exInfo?.unit === "sec" ? "s" : ""}` },
+                  { label: "Totaal", value: stats.total },
+                  { label: "vs Gisteren", value: stats.vsDayBefore === null ? "—" : `${stats.vsDayBefore > 0 ? "+" : ""}${stats.vsDayBefore}%`, color: stats.vsDayBefore === null ? "#444" : stats.vsDayBefore >= 0 ? "#4ade80" : "#f87171" }
+                ].map((s, i) => (
+                  <div key={i} className="stat-box">
+                    <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "20px", color: s.color || "#e8c840", lineHeight: 1 }}>{s.value}</div>
+                    <div style={{ fontSize: "8px", color: "#333", marginTop: "4px", textTransform: "uppercase", letterSpacing: "1px" }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ background: "#10101a", border: "1px solid #1c1c2c", borderRadius: "6px", padding: "12px 14px", marginBottom: "10px" }}>
+                <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "8px" }}>ANALYSE</div>
+                {stats.vsDayBefore !== null && (
+                  <div style={{ fontSize: "12px", display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
+                    <span style={{ color: "#444" }}>vs gisteren</span>
+                    <span style={{ color: stats.vsDayBefore >= 0 ? "#4ade80" : "#f87171" }}>
+                      {stats.vsDayBefore >= 0 ? "▲" : "▼"} {Math.abs(stats.vsDayBefore)}%
+                      <span style={{ color: "#2a2a3a", marginLeft: "8px", fontSize: "10px" }}>({stats.yesterday} → {stats.today})</span>
+                    </span>
+                  </div>
+                )}
+                {stats.vsFirst !== null && (
+                  <div style={{ fontSize: "12px", display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ color: "#444" }}>vs dag 1</span>
+                    <span style={{ color: stats.vsFirst >= 0 ? "#4ade80" : "#f87171" }}>
+                      {stats.vsFirst >= 0 ? "▲" : "▼"} {Math.abs(stats.vsFirst)}%
+                      <span style={{ color: "#2a2a3a", marginLeft: "8px", fontSize: "10px" }}>({stats.first} → {stats.today})</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ background: "#10101a", border: "1px solid #1c1c2c", borderRadius: "6px", padding: "12px 14px", marginBottom: "20px" }}>
+                <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "10px" }}>PROGRESSIE</div>
+                {(() => {
+                  const max = Math.max(...stats.dayTotals.map(d => d.total));
+                  return stats.dayTotals.slice(-7).map(d => (
+                    <div key={d.day} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "7px" }}>
+                      <span style={{ color: "#333", fontSize: "10px", width: "30px", textAlign: "right" }}>D{d.day}</span>
+                      <div style={{ flex: 1, height: "4px", background: "#1a1a25", borderRadius: "2px" }}>
+                        <div style={{ height: "100%", width: `${(d.total / max) * 100}%`, background: "linear-gradient(90deg,#e8c840,#ff9f43)", borderRadius: "2px", transition: "width 0.6s ease" }} />
+                      </div>
+                      <span style={{ color: "#ddd8ce", fontSize: "11px", width: "34px" }}>{d.total}</span>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </>
+          ) : (
+            <div style={{ textAlign: "center", color: "#222", padding: "24px 0", fontSize: "12px" }}>Nog geen data voor {exInfo?.label}</div>
+          )}
+
+          <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "10px" }}>LOGBOEK</div>
+          <div style={{ background: "#10101a", border: "1px solid #1c1c2c", borderRadius: "6px", overflow: "hidden" }}>
+            {[...data].reverse().map((d, ri) => {
+              const dayIndex = data.length - 1 - ri;
+              return (
+                <div key={d.day} style={{ padding: "10px 14px", borderBottom: ri < data.length - 1 ? "1px solid #141420" : "none" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                    <div>
+                      <span style={{ fontFamily: "'Oswald', sans-serif", fontSize: "15px", color: "#e8c840" }}>DAG {d.day}</span>
+                      <span style={{ color: "#222", fontSize: "10px", marginLeft: "8px" }}>{d.date}</span>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {d.exercises.map((e, j) => {
+                      const ex = EXERCISES.find(x => x.key === e.type);
+                      const isTarget = deleteTarget && deleteTarget.dayIndex === dayIndex && deleteTarget.exIndex === j;
+                      if (isTarget) return (
+                        <SwipeDeleteConfirm key={j} entry={e} onConfirm={() => deleteEntry(dayIndex, j)} onCancel={() => setDeleteTarget(null)} />
+                      );
+                      return (
+                        <div key={j} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <span style={{ background: "#18182a", border: "1px solid #202030", padding: "3px 8px", fontSize: "10px", color: "#666", borderRadius: "3px" }}>
+                            {ex?.icon} {e.amount}{ex?.unit === "sec" ? "s" : ""} {ex?.label}{e.variant !== "normaal" ? ` (${e.variant})` : ""}
+                          </span>
+                          <button
+                            onClick={() => setDeleteTarget({ dayIndex, exIndex: j })}
+                            style={{ background: "none", border: "1px solid #2a1515", color: "#3a2020", padding: "3px 8px", fontSize: "10px", cursor: "pointer", borderRadius: "3px", fontFamily: "'Space Mono', monospace" }}
+                          >🗑️</button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* PICK EXERCISE */}
+      {screen === "pick" && (
+        <div style={{ padding: "20px" }}>
+          <button className="back-btn" onClick={() => setScreen("home")} style={{ marginBottom: "20px" }}>← terug</button>
+          <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "22px", color: "#ddd8ce", marginBottom: "20px" }}>Welke oefening?</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {EXERCISES.map(e => (
+              <div key={e.key} className="ex-card" onClick={() => { setSelectedEx(e); setScreen("amount"); }}>
+                <span style={{ fontSize: "30px" }}>{e.icon}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "20px", color: "#ddd8ce" }}>{e.label}</div>
+                  <div style={{ fontSize: "10px", color: "#444", marginTop: "2px" }}>in {e.unit}</div>
+                </div>
+                <span style={{ color: "#2a2a3a", fontSize: "20px" }}>→</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* AMOUNT */}
+      {screen === "amount" && selectedEx && (
+        <div style={{ padding: "20px" }}>
+          <button className="back-btn" onClick={() => setScreen("pick")} style={{ marginBottom: "20px" }}>← terug</button>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+            <span style={{ fontSize: "28px" }}>{selectedEx.icon}</span>
+            <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: "22px", color: "#ddd8ce" }}>{selectedEx.label}</div>
+          </div>
+
+          {selectedEx.hasVariant && (
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "8px" }}>VARIANT</div>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button className={`var-btn ${selectedVariant === "normaal" ? "active" : ""}`} onClick={() => setSelectedVariant("normaal")}>Normaal</button>
+                <button className={`var-btn ${selectedVariant === "knieën" ? "active" : ""}`} onClick={() => setSelectedVariant("knieën")}>Op knieën</button>
+              </div>
+            </div>
+          )}
+
+          <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "8px" }}>AANTAL {selectedEx.unit === "sec" ? "(seconden)" : ""}</div>
+          <div style={{ marginBottom: "16px" }}>
+            <input type="number" placeholder="0" value={customAmount} onChange={e => setCustomAmount(e.target.value)} onKeyDown={e => e.key === "Enter" && customAmount && commitEntry(parseInt(customAmount))} />
+            {customAmount && parseInt(customAmount) > 0 && (
+              <button onClick={() => commitEntry(parseInt(customAmount))} style={{ width: "100%", padding: "14px", background: "#e8c840", color: "#080810", fontFamily: "'Oswald', sans-serif", fontSize: "18px", border: "none", cursor: "pointer", borderRadius: "0 0 4px 4px", letterSpacing: "1px" }}>
+                OPSLAAN ✓
+              </button>
+            )}
+          </div>
+
+          <div style={{ fontSize: "9px", color: "#333", letterSpacing: "2px", marginBottom: "10px" }}>SNEL KIEZEN</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+            {QUICK_AMOUNTS.map(n => (
+              <button key={n} className="quick-btn" onClick={() => commitEntry(n)}>{n}</button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {screen === "home" && (
+        <button onClick={() => setScreen("pick")} style={{
+          position: "fixed", bottom: "calc(24px + env(safe-area-inset-bottom))", left: "50%", transform: "translateX(-50%)",
+          background: "linear-gradient(135deg,#e8c840,#ff9f43)", color: "#080810",
+          border: "none", borderRadius: "50px", padding: "16px 36px",
+          fontFamily: "'Oswald', sans-serif", fontSize: "18px", fontWeight: 600,
+          cursor: "pointer", letterSpacing: "2px",
+          boxShadow: "0 6px 28px rgba(232,200,64,0.35)", zIndex: 50
+        }}>
+          + SCORE TOEVOEGEN
+        </button>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<FitnessTracker />);
+```
+
+  </script>
+</body>
+</html>

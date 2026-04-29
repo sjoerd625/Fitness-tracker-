@@ -52,8 +52,8 @@
           <span id="hdr-day">0</span><span style="font-size: 14px; color: #333;">/100</span>
         </div>
         <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end;">
-          <button class="day-btn red" id="btn-undo-day" onclick="undoDay()" style="display:none;">← ONGEDAAN</button>
-          <button class="day-btn" id="btn-next-day" onclick="nextDay()" style="display:none;">VOLGENDE DAG →</button>
+          <button class="day-btn red" id="btn-undo-day" style="display:none;">← ONGEDAAN</button>
+          <button class="day-btn" id="btn-next-day" style="display:none;">VOLGENDE DAG →</button>
         </div>
       </div>
     </div>
@@ -355,8 +355,9 @@
   document.getElementById("fab").addEventListener("click", () => showScreen("pick"));
   document.getElementById("btn-back-pick").addEventListener("click", () => showScreen("home"));
   document.getElementById("btn-back-amount").addEventListener("click", () => showScreen("pick"));
-  document.getElementById("btn-next-day").addEventListener("click", function() { nextDay(); });
-  document.getElementById("btn-undo-day").addEventListener("click", function() { undoDay(); });
+  document.getElementById("btn-next-day").addEventListener("click", nextDay);
+  document.getElementById("btn-undo-day").addEventListener("click", undoDay);
+
   document.getElementById("btn-normaal").addEventListener("click", () => setVariant("normaal"));
   document.getElementById("btn-knieen").addEventListener("click", () => setVariant("knieën"));
 

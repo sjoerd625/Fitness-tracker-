@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -39,6 +40,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- HEADER -->
+
   <div id="header" style="padding: 24px 20px 16px; border-bottom: 1px solid #141420;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
@@ -61,20 +63,25 @@
   </div>
 
   <!-- HOME -->
+
   <div class="screen active" id="screen-home">
     <div id="today-box" style="display:none; background: #0c180c; border: 1px solid #1a301a; border-radius: 6px; padding: 12px 14px; margin-bottom: 20px;">
       <div style="font-size: 9px; color: #4ade80; letter-spacing: 2px; margin-bottom: 8px;">VANDAAG</div>
       <div id="today-chips" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
     </div>
 
-    <div id="tabs" style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;"></div>
-    <div id="stats"></div>
+```
+<div id="tabs" style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;"></div>
+<div id="stats"></div>
 
-    <div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px; margin-top: 4px;">LOGBOEK</div>
-    <div id="logboek" style="background: #10101a; border: 1px solid #1c1c2c; border-radius: 6px; overflow: hidden;"></div>
+<div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px; margin-top: 4px;">LOGBOEK</div>
+<div id="logboek" style="background: #10101a; border: 1px solid #1c1c2c; border-radius: 6px; overflow: hidden;"></div>
+```
+
   </div>
 
   <!-- PICK -->
+
   <div class="screen" id="screen-pick">
     <button class="back-btn" id="btn-back-pick">← terug</button>
     <div style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #ddd8ce; margin-bottom: 20px;">Welke oefening?</div>
@@ -82,6 +89,7 @@
   </div>
 
   <!-- AMOUNT -->
+
   <div class="screen" id="screen-amount">
     <button class="back-btn" id="btn-back-amount">← terug</button>
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
@@ -104,7 +112,8 @@
     <div id="quick-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
   </div>
 
-  <button class="fab" id="fab">+ SCORE TOEVOEGEN</button>
+<button class="fab" id="fab">+ SCORE TOEVOEGEN</button>
+
 </div>
 
 <script>
@@ -150,12 +159,10 @@
 
   // --- Next / Undo day ---
   function nextDay() {
-    if (!confirm("Weet je zeker dat je naar de volgende dag wilt gaan?\n\nJe kunt dit ongedaan maken met de ← ONGEDAAN knop.")) return;
+    if (!confirm("Weet je zeker dat je naar de volgende dag wilt gaan?")) return;
     const last = data[data.length - 1];
     const nextNum = (last ? last.day : 0) + 1;
-    const lastDate = last ? new Date(last.date) : new Date();
-    lastDate.setDate(lastDate.getDate() + 1);
-    data.push({ day: nextNum, date: lastDate.toISOString().split("T")[0], exercises: [] });
+    data.push({ day: nextNum, date: todayStr(), exercises: [], manualDay: true });
     save();
     toast("📅 Dag " + nextNum + " gestart!");
     renderHome();
@@ -164,7 +171,9 @@
   function undoDay() {
     if (data.length === 0) return;
     const last = data[data.length - 1];
-    if (!confirm("Dag " + last.day + " verwijderen?\n\nAlle scores van die dag gaan weg.")) return;
+    if (last.exercises.length > 0) {
+      if (!confirm("Dag " + last.day + " heeft " + last.exercises.length + " score(s).\n\nAlleen de dag terugzetten of ook de scores verwijderen?")) return;
+    }
     data.splice(data.length - 1, 1);
     save();
     toast("↩️ Dag " + last.day + " ongedaan gemaakt");
@@ -181,14 +190,11 @@
   // --- Commit entry ---
   function commitEntry(amount) {
     if (!selEx || amount <= 0) return;
-    const t = todayStr();
-    const last = data[data.length - 1];
-    const isToday = last && last.date === t;
     const entry = { type: selEx.key, amount, variant: selVariant };
-    if (isToday) {
-      last.exercises.push(entry);
+    if (data.length === 0) {
+      data.push({ day: 1, date: todayStr(), exercises: [entry] });
     } else {
-      data.push({ day: (last ? last.day : 0) + 1, date: t, exercises: [entry] });
+      data[data.length - 1].exercises.push(entry);
     }
     save();
     toast("✓ " + amount + (selEx.unit === "sec" ? "s" : "") + " " + selEx.label + " opgeslagen!");
@@ -231,10 +237,8 @@
     document.getElementById("hdr-day").textContent = cur;
     document.getElementById("hdr-bar").style.width = cur + "%";
 
-    // Next/undo buttons
-    const last = data[data.length-1];
-    const lastIsToday = last && last.date === todayStr();
-    document.getElementById("btn-next-day").style.display = (data.length > 0 && !lastIsToday) ? "inline-block" : "none";
+    // Next/undo buttons — always visible when there is data
+    document.getElementById("btn-next-day").style.display = data.length > 0 ? "inline-block" : "none";
     document.getElementById("btn-undo-day").style.display = data.length > 0 ? "inline-block" : "none";
 
     // Today chips
@@ -375,5 +379,6 @@
   renderPick();
   renderHome();
 </script>
+
 </body>
 </html>

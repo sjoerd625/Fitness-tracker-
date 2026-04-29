@@ -171,9 +171,7 @@
   function undoDay() {
     if (data.length === 0) return;
     const last = data[data.length - 1];
-    if (last.exercises.length > 0) {
-      if (!confirm("Dag " + last.day + " heeft " + last.exercises.length + " score(s).\n\nAlleen de dag terugzetten of ook de scores verwijderen?")) return;
-    }
+    if (!confirm("Dag " + last.day + " verwijderen? Alle scores van die dag gaan weg.")) return;
     data.splice(data.length - 1, 1);
     save();
     toast("↩️ Dag " + last.day + " ongedaan gemaakt");

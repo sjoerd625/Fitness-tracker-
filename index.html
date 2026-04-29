@@ -13,27 +13,26 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: #080810; color: #ddd8ce; font-family: 'Space Mono', monospace; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
     #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; padding-top: env(safe-area-inset-top); }
-
-```
-.quick-btn { background: #12121e; border: 1px solid #1e1e2e; color: #ddd8ce; padding: 16px 0; font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 400; cursor: pointer; border-radius: 4px; transition: all 0.12s; width: 100%; }
-.quick-btn:active { transform: scale(0.94); background: #1a1a2e; border-color: #e8c840; color: #e8c840; }
-.ex-card { background: #10101a; border: 1px solid #1c1c2c; padding: 20px 18px; cursor: pointer; border-radius: 8px; transition: all 0.15s; display: flex; align-items: center; gap: 16px; }
-.ex-card:active { border-color: #e8c840; background: #14142a; }
-.tab { background: none; border: none; border-bottom: 2px solid transparent; color: #444; padding: 8px 14px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 10px; transition: all 0.2s; white-space: nowrap; }
-.tab.active { border-bottom-color: #e8c840; color: #e8c840; }
-.stat-box { background: #10101a; border: 1px solid #1c1c2c; padding: 14px 10px; border-radius: 6px; text-align: center; }
-.var-btn { flex: 1; padding: 12px; background: #10101a; border: 1px solid #1e1e2e; color: #555; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; transition: all 0.15s; }
-.var-btn.active { border-color: #e8c840; color: #e8c840; background: rgba(232,200,64,0.07); }
-.back-btn { background: none; border: none; color: #444; cursor: pointer; font-size: 12px; font-family: 'Space Mono', monospace; padding: 0; margin-bottom: 20px; display: block; }
-input[type=number] { background: #10101a; border: 1px solid #2a2a3a; border-bottom: 2px solid #e8c840; color: #e8c840; padding: 14px; font-family: 'Oswald', sans-serif; font-size: 36px; width: 100%; outline: none; text-align: center; border-radius: 4px 4px 0 0; -webkit-appearance: none; }
-input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-.screen { display: none; padding: 20px; }
-.screen.active { display: block; }
-#screen-home { padding-bottom: 100px; }
-.toast { position: fixed; top: calc(16px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); background: #0e1f0e; border: 1px solid #4ade80; color: #4ade80; padding: 10px 20px; border-radius: 4px; font-size: 12px; z-index: 999; white-space: nowrap; display: none; }
-.fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: linear-gradient(135deg,#e8c840,#ff9f43); color: #080810; border: none; border-radius: 50px; padding: 16px 36px; font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; cursor: pointer; letter-spacing: 2px; box-shadow: 0 6px 28px rgba(232,200,64,0.35); z-index: 50; }
-```
-
+    .screen { display: none; padding: 20px 20px 120px; }
+    .screen.active { display: block; }
+    .toast { position: fixed; top: calc(16px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); background: #0e1f0e; border: 1px solid #4ade80; color: #4ade80; padding: 10px 20px; border-radius: 4px; font-size: 12px; z-index: 999; white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+    .fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: linear-gradient(135deg,#e8c840,#ff9f43); color: #080810; border: none; border-radius: 50px; padding: 16px 36px; font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; cursor: pointer; letter-spacing: 2px; box-shadow: 0 6px 28px rgba(232,200,64,0.35); z-index: 50; }
+    .tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: #444; padding: 10px 14px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 10px; white-space: nowrap; }
+    .tab-btn.active { border-bottom-color: #e8c840; color: #e8c840; }
+    .stat-box { background: #10101a; border: 1px solid #1c1c2c; padding: 14px 10px; border-radius: 6px; text-align: center; }
+    .ex-card { background: #10101a; border: 1px solid #1c1c2c; padding: 20px 18px; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+    .ex-card:active { border-color: #e8c840; background: #14142a; }
+    .var-btn { flex: 1; padding: 12px; background: #10101a; border: 1px solid #1e1e2e; color: #555; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 11px; border-radius: 4px; }
+    .var-btn.active { border-color: #e8c840; color: #e8c840; background: rgba(232,200,64,0.07); }
+    .quick-btn { background: #12121e; border: 1px solid #1e1e2e; color: #ddd8ce; padding: 16px 0; font-family: 'Oswald', sans-serif; font-size: 22px; cursor: pointer; border-radius: 4px; width: 100%; }
+    .quick-btn:active { background: #1a1a2e; border-color: #e8c840; color: #e8c840; transform: scale(0.94); }
+    .back-btn { background: none; border: none; color: #444; cursor: pointer; font-size: 12px; font-family: 'Space Mono', monospace; padding: 0; margin-bottom: 20px; display: block; }
+    input[type=number] { background: #10101a; border: 1px solid #2a2a3a; border-bottom: 2px solid #e8c840; color: #e8c840; padding: 14px; font-family: 'Oswald', sans-serif; font-size: 36px; width: 100%; outline: none; text-align: center; border-radius: 4px 4px 0 0; -webkit-appearance: none; }
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .day-btn { background: none; border: 1px solid #2a2a3a; color: #555; font-size: 9px; font-family: 'Space Mono', monospace; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+    .day-btn.red { border-color: #2a1515; color: #f87171; }
+    .delete-btn { background: none; border: 1px solid #2a1515; color: #3a2020; padding: 3px 8px; font-size: 10px; cursor: pointer; border-radius: 3px; font-family: 'Space Mono', monospace; }
   </style>
 </head>
 <body>
@@ -42,115 +41,115 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 
   <!-- HEADER -->
 
-  <div style="padding: 24px 20px 16px; border-bottom: 1px solid #141420;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+  <div id="header" style="padding: 24px 20px 16px; border-bottom: 1px solid #141420;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
         <div style="font-family: 'Oswald', sans-serif; font-size: 30px; font-weight: 700; color: #e8c840; letter-spacing: 1px; line-height: 1;">100 DAGEN</div>
         <div style="font-size: 9px; color: #333; letter-spacing: 3px; margin-top: 2px;">CHALLENGE TRACKER</div>
       </div>
       <div style="text-align: right;">
         <div style="font-family: 'Oswald', sans-serif; font-size: 32px; color: #ddd8ce; line-height: 1;">
-          <span id="current-day">0</span><span style="font-size: 14px; color: #333;">/100</span>
+          <span id="hdr-day">0</span><span style="font-size: 14px; color: #333;">/100</span>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end;">
+          <button class="day-btn red" id="btn-undo-day" onclick="undoDay()" style="display:none;">← ONGEDAAN</button>
+          <button class="day-btn" id="btn-next-day" onclick="nextDay()" style="display:none;">VOLGENDE DAG →</button>
         </div>
       </div>
     </div>
     <div style="margin-top: 14px; height: 4px; background: #141420; border-radius: 2px;">
-      <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg,#e8c840,#ff9f43); border-radius: 2px; transition: width 0.8s ease;"></div>
+      <div id="hdr-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg,#e8c840,#ff9f43); border-radius: 2px; transition: width 0.8s ease;"></div>
     </div>
   </div>
 
-  <!-- HOME SCREEN -->
+  <!-- HOME -->
 
   <div class="screen active" id="screen-home">
-    <div id="today-section" style="display:none; background: #0c180c; border: 1px solid #1a301a; border-radius: 6px; padding: 12px 14px; margin-bottom: 20px;">
+    <div id="today-box" style="display:none; background: #0c180c; border: 1px solid #1a301a; border-radius: 6px; padding: 12px 14px; margin-bottom: 20px;">
       <div style="font-size: 9px; color: #4ade80; letter-spacing: 2px; margin-bottom: 8px;">VANDAAG</div>
-      <div id="today-entries" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+      <div id="today-chips" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
     </div>
 
 ```
-<div style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;" id="tabs"></div>
+<div id="tabs" style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;"></div>
+<div id="stats"></div>
 
-<div id="stats-section"></div>
-
-<div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px;">LOGBOEK</div>
+<div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px; margin-top: 4px;">LOGBOEK</div>
 <div id="logboek" style="background: #10101a; border: 1px solid #1c1c2c; border-radius: 6px; overflow: hidden;"></div>
 ```
 
   </div>
 
-  <!-- PICK SCREEN -->
+  <!-- PICK -->
 
   <div class="screen" id="screen-pick">
-    <button class="back-btn" onclick="showScreen('home')">← terug</button>
+    <button class="back-btn" id="btn-back-pick">← terug</button>
     <div style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #ddd8ce; margin-bottom: 20px;">Welke oefening?</div>
-    <div style="display: flex; flex-direction: column; gap: 10px;" id="exercise-list"></div>
+    <div id="ex-list"></div>
   </div>
 
-  <!-- AMOUNT SCREEN -->
+  <!-- AMOUNT -->
 
   <div class="screen" id="screen-amount">
-    <button class="back-btn" onclick="showScreen('pick')">← terug</button>
+    <button class="back-btn" id="btn-back-amount">← terug</button>
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-      <span id="amount-icon" style="font-size: 28px;"></span>
-      <div id="amount-label" style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #ddd8ce;"></div>
+      <span id="ex-icon" style="font-size: 28px;"></span>
+      <div id="ex-label" style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #ddd8ce;"></div>
     </div>
-    <div id="variant-section" style="margin-bottom: 20px; display: none;">
+    <div id="variant-row" style="margin-bottom: 20px; display: none;">
       <div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 8px;">VARIANT</div>
       <div style="display: flex; gap: 8px;">
-        <button class="var-btn active" id="btn-normaal" onclick="setVariant('normaal')">Normaal</button>
-        <button class="var-btn" id="btn-knieen" onclick="setVariant('knieën')">Op knieën</button>
+        <button class="var-btn active" id="btn-normaal">Normaal</button>
+        <button class="var-btn" id="btn-knieen">Op knieën</button>
       </div>
     </div>
     <div id="unit-label" style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 8px;">AANTAL</div>
     <div style="margin-bottom: 16px;">
-      <input type="number" id="custom-input" placeholder="0" oninput="onCustomInput()" onkeydown="onCustomKey(event)" />
-      <button id="save-custom-btn" onclick="saveCustom()" style="display:none; width: 100%; padding: 14px; background: #e8c840; color: #080810; font-family: 'Oswald', sans-serif; font-size: 18px; border: none; cursor: pointer; border-radius: 0 0 4px 4px; letter-spacing: 1px;">
-        OPSLAAN ✓
-      </button>
+      <input type="number" id="num-input" placeholder="0" />
+      <button id="btn-save-custom" style="display:none; width: 100%; padding: 14px; background: #e8c840; color: #080810; font-family: 'Oswald', sans-serif; font-size: 18px; border: none; cursor: pointer; border-radius: 0 0 4px 4px; letter-spacing: 1px;">OPSLAAN ✓</button>
     </div>
     <div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px;">SNEL KIEZEN</div>
-    <div id="quick-btns" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
+    <div id="quick-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
   </div>
 
-<button class="fab" id="fab" onclick="showScreen('pick')">+ SCORE TOEVOEGEN</button>
+<button class="fab" id="fab">+ SCORE TOEVOEGEN</button>
 
 </div>
 
 <script>
-  const STORAGE_KEY = "fitness_tracker_data_v1";
+  const KEY = "fitness_v3";
   const EXERCISES = [
-    { key: "PU", label: "Push-ups", icon: "💪", unit: "reps", hasVariant: true },
-    { key: "S",  label: "Squats",   icon: "🦵", unit: "reps", hasVariant: false },
-    { key: "PL", label: "Plank",    icon: "🧘", unit: "sec",  hasVariant: false },
+    { key:"PU", label:"Push-ups", icon:"💪", unit:"reps", hasVariant:true },
+    { key:"S",  label:"Squats",   icon:"🦵", unit:"reps", hasVariant:false },
+    { key:"PL", label:"Plank",    icon:"🧘", unit:"sec",  hasVariant:false },
   ];
-  const QUICK_AMOUNTS = [5, 10, 15, 20, 25, 30, 40, 50, 60, 90, 100, 120];
+  const QUICK = [5,10,15,20,25,30,40,50,60,90,100,120];
 
   let data = [];
   let activeTab = "PU";
-  let selectedEx = null;
-  let selectedVariant = "normaal";
+  let selEx = null;
+  let selVariant = "normaal";
 
-  function loadData() {
-    try {
-      const s = localStorage.getItem(STORAGE_KEY);
-      if (s) return JSON.parse(s);
-    } catch(e) {}
-    return [{ day: 1, date: "2026-04-28", exercises: [{ type: "PU", amount: 9, variant: "knieën" }, { type: "S", amount: 90, variant: "normaal" }] }];
+  // --- Storage ---
+  function load() {
+    try { const s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch(e) {}
+    return [{ day:1, date:"2026-04-28", exercises:[{type:"PU",amount:9,variant:"knieën"},{type:"S",amount:90,variant:"normaal"}] }];
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) {} }
+
+  // --- Helpers ---
+  function todayStr() { return new Date().toISOString().split("T")[0]; }
+
+  let toastTimer = null;
+  function toast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2500);
   }
 
-  function saveData() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
-  }
-
-  function today() { return new Date().toISOString().split("T")[0]; }
-
-  function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.style.display = "block";
-    setTimeout(() => t.style.display = "none", 2500);
-  }
-
+  // --- Screens ---
   function showScreen(name) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("screen-" + name).classList.add("active");
@@ -158,192 +157,230 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
     if (name === "home") renderHome();
   }
 
+  // --- Next / Undo day ---
+  function nextDay() {
+    if (!confirm("Weet je zeker dat je naar de volgende dag wilt gaan?\n\nJe kunt dit ongedaan maken met de ← ONGEDAAN knop.")) return;
+    const last = data[data.length - 1];
+    const nextNum = (last ? last.day : 0) + 1;
+    const lastDate = last ? new Date(last.date) : new Date();
+    lastDate.setDate(lastDate.getDate() + 1);
+    data.push({ day: nextNum, date: lastDate.toISOString().split("T")[0], exercises: [] });
+    save();
+    toast("📅 Dag " + nextNum + " gestart!");
+    renderHome();
+  }
+
+  function undoDay() {
+    if (data.length === 0) return;
+    const last = data[data.length - 1];
+    if (!confirm("Dag " + last.day + " verwijderen?\n\nAlle scores van die dag gaan weg.")) return;
+    data.splice(data.length - 1, 1);
+    save();
+    toast("↩️ Dag " + last.day + " ongedaan gemaakt");
+    renderHome();
+  }
+
+  // --- Variant ---
   function setVariant(v) {
-    selectedVariant = v;
+    selVariant = v;
     document.getElementById("btn-normaal").className = "var-btn" + (v === "normaal" ? " active" : "");
     document.getElementById("btn-knieen").className = "var-btn" + (v === "knieën" ? " active" : "");
   }
 
-  function onCustomInput() {
-    const val = document.getElementById("custom-input").value;
-    document.getElementById("save-custom-btn").style.display = (val && parseInt(val) > 0) ? "block" : "none";
-  }
-
-  function onCustomKey(e) {
-    if (e.key === "Enter") {
-      const val = document.getElementById("custom-input").value;
-      if (val && parseInt(val) > 0) commitEntry(parseInt(val));
-    }
-  }
-
-  function saveCustom() {
-    const val = parseInt(document.getElementById("custom-input").value);
-    if (val > 0) commitEntry(val);
-  }
-
+  // --- Commit entry ---
   function commitEntry(amount) {
-    const t = today();
+    if (!selEx || amount <= 0) return;
+    const t = todayStr();
     const last = data[data.length - 1];
     const isToday = last && last.date === t;
-    const entry = { type: selectedEx.key, amount, variant: selectedVariant };
+    const entry = { type: selEx.key, amount, variant: selVariant };
     if (isToday) {
-      data[data.length - 1].exercises.push(entry);
+      last.exercises.push(entry);
     } else {
-      data.push({ day: (data.length > 0 ? data[data.length-1].day : 0) + 1, date: t, exercises: [entry] });
+      data.push({ day: (last ? last.day : 0) + 1, date: t, exercises: [entry] });
     }
-    saveData();
-    showToast("✓ " + amount + (selectedEx.unit === "sec" ? "s" : "") + " " + selectedEx.label + " opgeslagen!");
-    document.getElementById("custom-input").value = "";
-    document.getElementById("save-custom-btn").style.display = "none";
-    selectedVariant = "normaal";
+    save();
+    toast("✓ " + amount + (selEx.unit === "sec" ? "s" : "") + " " + selEx.label + " opgeslagen!");
+    document.getElementById("num-input").value = "";
+    document.getElementById("btn-save-custom").style.display = "none";
+    selVariant = "normaal";
     showScreen("home");
   }
 
-  function deleteEntry(dayIndex, exIndex) {
-    data[dayIndex].exercises.splice(exIndex, 1);
-    if (data[dayIndex].exercises.length === 0) data.splice(dayIndex, 1);
-    saveData();
-    showToast("🗑️ Score verwijderd");
+  // --- Delete entry ---
+  function deleteEntry(di, ei) {
+    if (!confirm("Score verwijderen?")) return;
+    data[di].exercises.splice(ei, 1);
+    if (data[di].exercises.length === 0) data.splice(di, 1);
+    save();
+    toast("🗑️ Score verwijderd");
     renderHome();
   }
 
+  // --- Stats ---
   function getStats(type) {
-    const dayTotals = data.map(d => ({
+    const days = data.map(d => ({
       day: d.day,
-      total: d.exercises.filter(e => e.type === type).reduce((s, e) => s + e.amount, 0)
+      total: d.exercises.filter(e => e.type === type).reduce((s,e) => s + e.amount, 0)
     })).filter(d => d.total > 0);
-    if (dayTotals.length === 0) return null;
-    const amounts = dayTotals.map(d => d.total);
-    const todayVal = amounts[amounts.length - 1];
-    const yesterday = amounts.length > 1 ? amounts[amounts.length - 2] : null;
-    const first = amounts[0];
-    const avg = Math.round(amounts.reduce((a, b) => a + b, 0) / amounts.length);
-    const vsDayBefore = yesterday !== null ? Math.round(((todayVal - yesterday) / yesterday) * 100) : null;
-    const vsFirst = amounts.length > 1 ? Math.round(((todayVal - first) / first) * 100) : null;
-    return { today: todayVal, yesterday, first, avg, vsDayBefore, vsFirst, total: amounts.reduce((a, b) => a + b, 0), dayTotals };
+    if (!days.length) return null;
+    const vals = days.map(d => d.total);
+    const cur = vals[vals.length-1];
+    const prev = vals.length > 1 ? vals[vals.length-2] : null;
+    const first = vals[0];
+    const avg = Math.round(vals.reduce((a,b) => a+b,0) / vals.length);
+    const vsDay = prev !== null ? Math.round(((cur-prev)/prev)*100) : null;
+    const vsFirst = vals.length > 1 ? Math.round(((cur-first)/first)*100) : null;
+    return { cur, prev, first, avg, vsDay, vsFirst, total: vals.reduce((a,b)=>a+b,0), days };
   }
 
+  // --- Render home ---
   function renderHome() {
-    const currentDay = data.length > 0 ? data[data.length - 1].day : 0;
-    document.getElementById("current-day").textContent = currentDay;
-    document.getElementById("progress-bar").style.width = currentDay + "%";
+    const cur = data.length > 0 ? data[data.length-1].day : 0;
+    document.getElementById("hdr-day").textContent = cur;
+    document.getElementById("hdr-bar").style.width = cur + "%";
 
-    // Today entries
-    const t = today();
-    const todayData = data.find(d => d.date === t);
+    // Next/undo buttons
+    const last = data[data.length-1];
+    const lastIsToday = last && last.date === todayStr();
+    document.getElementById("btn-next-day").style.display = (data.length > 0 && !lastIsToday) ? "inline-block" : "none";
+    document.getElementById("btn-undo-day").style.display = data.length > 0 ? "inline-block" : "none";
+
+    // Today chips
+    const todayData = data.find(d => d.date === todayStr());
     const todayEntries = todayData ? todayData.exercises : [];
-    const todaySec = document.getElementById("today-section");
-    const todayDiv = document.getElementById("today-entries");
+    const todayBox = document.getElementById("today-box");
     if (todayEntries.length > 0) {
-      todaySec.style.display = "block";
-      todayDiv.innerHTML = todayEntries.map(e => {
+      todayBox.style.display = "block";
+      document.getElementById("today-chips").innerHTML = todayEntries.map(e => {
         const ex = EXERCISES.find(x => x.key === e.type);
-        return `<span style="background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.18); color: #4ade80; padding: 3px 10px; font-size: 11px; border-radius: 3px;">${ex.icon} ${e.amount}${ex.unit === "sec" ? "s" : ""} ${ex.label}${e.variant !== "normaal" ? ` (${e.variant})` : ""}</span>`;
+        return `<span style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.18);color:#4ade80;padding:3px 10px;font-size:11px;border-radius:3px;">${ex.icon} ${e.amount}${ex.unit==="sec"?"s":""} ${ex.label}${e.variant!=="normaal"?` (${e.variant})`:""}</span>`;
       }).join("");
     } else {
-      todaySec.style.display = "none";
+      todayBox.style.display = "none";
     }
 
     // Tabs
     document.getElementById("tabs").innerHTML = EXERCISES.map(e =>
-      `<button class="tab ${activeTab === e.key ? "active" : ""}" onclick="setTab('${e.key}')">${e.icon} ${e.label}</button>`
+      `<button class="tab-btn ${activeTab===e.key?"active":""}" data-key="${e.key}">${e.icon} ${e.label}</button>`
     ).join("");
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", function() { activeTab = this.dataset.key; renderHome(); });
+    });
 
     // Stats
-    const stats = getStats(activeTab);
+    const st = getStats(activeTab);
     const exInfo = EXERCISES.find(e => e.key === activeTab);
-    const statsDiv = document.getElementById("stats-section");
-    if (stats) {
-      const vsDayColor = stats.vsDayBefore === null ? "#444" : stats.vsDayBefore >= 0 ? "#4ade80" : "#f87171";
-      const max = Math.max(...stats.dayTotals.map(d => d.total));
-      statsDiv.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px;">
-          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${stats.today}${exInfo.unit==="sec"?"s":""}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Vandaag</div></div>
-          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${stats.avg}${exInfo.unit==="sec"?"s":""}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Gemiddeld</div></div>
-          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${stats.total}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Totaal</div></div>
-          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:${vsDayColor};line-height:1;">${stats.vsDayBefore===null?"—":(stats.vsDayBefore>0?"+":"")+stats.vsDayBefore+"%"}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">vs Gisteren</div></div>
+    const statsEl = document.getElementById("stats");
+    if (st) {
+      const vsDayColor = st.vsDay === null ? "#444" : st.vsDay >= 0 ? "#4ade80" : "#f87171";
+      const max = Math.max(...st.days.map(d => d.total));
+      statsEl.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${st.cur}${exInfo.unit==="sec"?"s":""}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Vandaag</div></div>
+          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${st.avg}${exInfo.unit==="sec"?"s":""}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Gemiddeld</div></div>
+          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#e8c840;line-height:1;">${st.total}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">Totaal</div></div>
+          <div class="stat-box"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:${vsDayColor};line-height:1;">${st.vsDay===null?"—":(st.vsDay>0?"+":"")+st.vsDay+"%"}</div><div style="font-size:8px;color:#333;margin-top:4px;text-transform:uppercase;letter-spacing:1px;">vs Gisteren</div></div>
         </div>
         <div style="background:#10101a;border:1px solid #1c1c2c;border-radius:6px;padding:12px 14px;margin-bottom:10px;">
           <div style="font-size:9px;color:#333;letter-spacing:2px;margin-bottom:8px;">ANALYSE</div>
-          ${stats.vsDayBefore !== null ? `<div style="font-size:12px;display:flex;justify-content:space-between;margin-bottom:5px;"><span style="color:#444;">vs gisteren</span><span style="color:${stats.vsDayBefore>=0?"#4ade80":"#f87171"};">${stats.vsDayBefore>=0?"▲":"▼"} ${Math.abs(stats.vsDayBefore)}% <span style="color:#2a2a3a;font-size:10px;">(${stats.yesterday} → ${stats.today})</span></span></div>` : ""}
-          ${stats.vsFirst !== null ? `<div style="font-size:12px;display:flex;justify-content:space-between;"><span style="color:#444;">vs dag 1</span><span style="color:${stats.vsFirst>=0?"#4ade80":"#f87171"};">${stats.vsFirst>=0?"▲":"▼"} ${Math.abs(stats.vsFirst)}% <span style="color:#2a2a3a;font-size:10px;">(${stats.first} → ${stats.today})</span></span></div>` : ""}
+          ${st.vsDay!==null?`<div style="font-size:12px;display:flex;justify-content:space-between;margin-bottom:5px;"><span style="color:#444;">vs gisteren</span><span style="color:${st.vsDay>=0?"#4ade80":"#f87171"};">${st.vsDay>=0?"▲":"▼"} ${Math.abs(st.vsDay)}% <span style="color:#2a2a3a;font-size:10px;">(${st.prev} → ${st.cur})</span></span></div>`:""}
+          ${st.vsFirst!==null?`<div style="font-size:12px;display:flex;justify-content:space-between;"><span style="color:#444;">vs dag 1</span><span style="color:${st.vsFirst>=0?"#4ade80":"#f87171"};">${st.vsFirst>=0?"▲":"▼"} ${Math.abs(st.vsFirst)}% <span style="color:#2a2a3a;font-size:10px;">(${st.first} → ${st.cur})</span></span></div>`:""}
         </div>
         <div style="background:#10101a;border:1px solid #1c1c2c;border-radius:6px;padding:12px 14px;margin-bottom:20px;">
           <div style="font-size:9px;color:#333;letter-spacing:2px;margin-bottom:10px;">PROGRESSIE</div>
-          ${stats.dayTotals.slice(-7).map(d => `
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px;">
-              <span style="color:#333;font-size:10px;width:30px;text-align:right;">D${d.day}</span>
-              <div style="flex:1;height:4px;background:#1a1a25;border-radius:2px;">
-                <div style="height:100%;width:${(d.total/max)*100}%;background:linear-gradient(90deg,#e8c840,#ff9f43);border-radius:2px;"></div>
-              </div>
-              <span style="color:#ddd8ce;font-size:11px;width:34px;">${d.total}</span>
-            </div>`).join("")}
+          ${st.days.slice(-7).map(d=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px;"><span style="color:#333;font-size:10px;width:30px;text-align:right;">D${d.day}</span><div style="flex:1;height:4px;background:#1a1a25;border-radius:2px;"><div style="height:100%;width:${(d.total/max)*100}%;background:linear-gradient(90deg,#e8c840,#ff9f43);border-radius:2px;"></div></div><span style="color:#ddd8ce;font-size:11px;width:34px;">${d.total}</span></div>`).join("")}
         </div>`;
     } else {
-      statsDiv.innerHTML = `<div style="text-align:center;color:#222;padding:24px 0;font-size:12px;">Nog geen data voor ${exInfo.label}</div>`;
+      statsEl.innerHTML = `<div style="text-align:center;color:#222;padding:24px 0;font-size:12px;">Nog geen data voor ${exInfo.label}</div>`;
     }
 
     // Logboek
-    const logDiv = document.getElementById("logboek");
-    if (data.length === 0) { logDiv.innerHTML = `<div style="padding:16px;color:#333;font-size:12px;text-align:center;">Nog geen scores</div>`; return; }
-    logDiv.innerHTML = [...data].reverse().map((d, ri) => {
-      const dayIndex = data.length - 1 - ri;
-      return `<div style="padding:10px 14px;border-bottom:${ri < data.length-1 ? "1px solid #141420" : "none"};">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <div><span style="font-family:'Oswald',sans-serif;font-size:15px;color:#e8c840;">DAG ${d.day}</span><span style="color:#222;font-size:10px;margin-left:8px;">${d.date}</span></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:4px;">
-          ${d.exercises.map((e, j) => {
-            const ex = EXERCISES.find(x => x.key === e.type);
-            return `<div style="display:flex;align-items:center;justify-content:space-between;">
-              <span style="background:#18182a;border:1px solid #202030;padding:3px 8px;font-size:10px;color:#666;border-radius:3px;">${ex.icon} ${e.amount}${ex.unit==="sec"?"s":""} ${ex.label}${e.variant!=="normaal"?` (${e.variant})`:""}</span>
-              <button onclick="confirmDelete(${dayIndex},${j})" style="background:none;border:1px solid #2a1515;color:#3a2020;padding:3px 8px;font-size:10px;cursor:pointer;border-radius:3px;font-family:'Space Mono',monospace;">🗑️</button>
-            </div>`;
-          }).join("")}
-        </div>
-      </div>`;
-    }).join("");
+    const log = document.getElementById("logboek");
+    if (!data.length) { log.innerHTML = `<div style="padding:16px;color:#333;font-size:12px;text-align:center;">Nog geen scores</div>`; return; }
+    log.innerHTML = "";
+    [...data].reverse().forEach((d, ri) => {
+      const di = data.length - 1 - ri;
+      const div = document.createElement("div");
+      div.style.cssText = `padding:10px 14px;border-bottom:${ri<data.length-1?"1px solid #141420":"none"};`;
+      div.innerHTML = `<div style="margin-bottom:6px;"><span style="font-family:'Oswald',sans-serif;font-size:15px;color:#e8c840;">DAG ${d.day}</span><span style="color:#222;font-size:10px;margin-left:8px;">${d.date}</span></div>`;
+      if (d.exercises.length === 0) {
+        div.innerHTML += `<span style="font-size:10px;color:#333;">Geen scores</span>`;
+      } else {
+        d.exercises.forEach((e, ei) => {
+          const ex = EXERCISES.find(x => x.key === e.type);
+          const row = document.createElement("div");
+          row.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;";
+          row.innerHTML = `<span style="background:#18182a;border:1px solid #202030;padding:3px 8px;font-size:10px;color:#666;border-radius:3px;">${ex.icon} ${e.amount}${ex.unit==="sec"?"s":""} ${ex.label}${e.variant!=="normaal"?` (${e.variant})`:""}</span>`;
+          const delBtn = document.createElement("button");
+          delBtn.className = "delete-btn";
+          delBtn.textContent = "🗑️";
+          delBtn.setAttribute("onclick", `deleteEntry(${di}, ${ei})`);
+          row.appendChild(delBtn);
+          div.appendChild(row);
+        });
+      }
+      log.appendChild(div);
+    });
   }
 
-  function setTab(key) {
-    activeTab = key;
-    renderHome();
-  }
-
-  function confirmDelete(dayIndex, exIndex) {
-    if (confirm("Score verwijderen?")) deleteEntry(dayIndex, exIndex);
-  }
-
+  // --- Render pick screen ---
   function renderPick() {
-    document.getElementById("exercise-list").innerHTML = EXERCISES.map(e =>
-      `<div class="ex-card" onclick="selectExercise('${e.key}')">
-        <span style="font-size:30px;">${e.icon}</span>
-        <div style="flex:1;">
-          <div style="font-family:'Oswald',sans-serif;font-size:20px;color:#ddd8ce;">${e.label}</div>
-          <div style="font-size:10px;color:#444;margin-top:2px;">in ${e.unit}</div>
-        </div>
-        <span style="color:#2a2a3a;font-size:20px;">→</span>
-      </div>`
-    ).join("");
+    const list = document.getElementById("ex-list");
+    list.innerHTML = "";
+    EXERCISES.forEach(e => {
+      const card = document.createElement("div");
+      card.className = "ex-card";
+      card.innerHTML = `<span style="font-size:30px;">${e.icon}</span><div style="flex:1;"><div style="font-family:'Oswald',sans-serif;font-size:20px;color:#ddd8ce;">${e.label}</div><div style="font-size:10px;color:#444;margin-top:2px;">in ${e.unit}</div></div><span style="color:#2a2a3a;font-size:20px;">→</span>`;
+      card.addEventListener("click", () => {
+        selEx = e;
+        selVariant = "normaal";
+        document.getElementById("ex-icon").textContent = e.icon;
+        document.getElementById("ex-label").textContent = e.label;
+        document.getElementById("unit-label").textContent = "AANTAL" + (e.unit==="sec" ? " (seconden)" : "");
+        document.getElementById("variant-row").style.display = e.hasVariant ? "block" : "none";
+        setVariant("normaal");
+        document.getElementById("num-input").value = "";
+        document.getElementById("btn-save-custom").style.display = "none";
+        // Render quick buttons
+        const grid = document.getElementById("quick-grid");
+        grid.innerHTML = "";
+        QUICK.forEach(n => {
+          const btn = document.createElement("button");
+          btn.className = "quick-btn";
+          btn.textContent = n;
+          btn.addEventListener("click", () => commitEntry(n));
+          grid.appendChild(btn);
+        });
+        showScreen("amount");
+      });
+      list.appendChild(card);
+    });
   }
 
-  function selectExercise(key) {
-    selectedEx = EXERCISES.find(e => e.key === key);
-    selectedVariant = "normaal";
-    document.getElementById("amount-icon").textContent = selectedEx.icon;
-    document.getElementById("amount-label").textContent = selectedEx.label;
-    document.getElementById("unit-label").textContent = "AANTAL" + (selectedEx.unit === "sec" ? " (seconden)" : "");
-    document.getElementById("variant-section").style.display = selectedEx.hasVariant ? "block" : "none";
-    setVariant("normaal");
-    document.getElementById("custom-input").value = "";
-    document.getElementById("save-custom-btn").style.display = "none";
-    const qDiv = document.getElementById("quick-btns");
-    qDiv.innerHTML = QUICK_AMOUNTS.map(n => `<button class="quick-btn" onclick="commitEntry(${n})">${n}</button>`).join("");
-    showScreen("amount");
-  }
+  // --- Wire up static buttons ---
+  document.getElementById("fab").addEventListener("click", () => showScreen("pick"));
+  document.getElementById("btn-back-pick").addEventListener("click", () => showScreen("home"));
+  document.getElementById("btn-back-amount").addEventListener("click", () => showScreen("pick"));
+  document.getElementById("btn-next-day").addEventListener("click", function() { nextDay(); });
+  document.getElementById("btn-undo-day").addEventListener("click", function() { undoDay(); });
+  document.getElementById("btn-normaal").addEventListener("click", () => setVariant("normaal"));
+  document.getElementById("btn-knieen").addEventListener("click", () => setVariant("knieën"));
 
-  // Init
-  data = loadData();
+  document.getElementById("num-input").addEventListener("input", function() {
+    const v = parseInt(this.value);
+    document.getElementById("btn-save-custom").style.display = (v > 0) ? "block" : "none";
+  });
+  document.getElementById("num-input").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") { const v = parseInt(this.value); if (v > 0) commitEntry(v); }
+  });
+  document.getElementById("btn-save-custom").addEventListener("click", function() {
+    const v = parseInt(document.getElementById("num-input").value);
+    if (v > 0) commitEntry(v);
+  });
+
+  // --- Init ---
+  data = load();
   renderPick();
   renderHome();
 </script>

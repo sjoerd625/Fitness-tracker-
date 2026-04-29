@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -40,7 +39,6 @@
   <div class="toast" id="toast"></div>
 
   <!-- HEADER -->
-
   <div id="header" style="padding: 24px 20px 16px; border-bottom: 1px solid #141420;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
@@ -63,25 +61,20 @@
   </div>
 
   <!-- HOME -->
-
   <div class="screen active" id="screen-home">
     <div id="today-box" style="display:none; background: #0c180c; border: 1px solid #1a301a; border-radius: 6px; padding: 12px 14px; margin-bottom: 20px;">
       <div style="font-size: 9px; color: #4ade80; letter-spacing: 2px; margin-bottom: 8px;">VANDAAG</div>
       <div id="today-chips" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
     </div>
 
-```
-<div id="tabs" style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;"></div>
-<div id="stats"></div>
+    <div id="tabs" style="border-bottom: 1px solid #141420; display: flex; overflow-x: auto; margin-bottom: 16px;"></div>
+    <div id="stats"></div>
 
-<div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px; margin-top: 4px;">LOGBOEK</div>
-<div id="logboek" style="background: #10101a; border: 1px solid #1c1c2c; border-radius: 6px; overflow: hidden;"></div>
-```
-
+    <div style="font-size: 9px; color: #333; letter-spacing: 2px; margin-bottom: 10px; margin-top: 4px;">LOGBOEK</div>
+    <div id="logboek" style="background: #10101a; border: 1px solid #1c1c2c; border-radius: 6px; overflow: hidden;"></div>
   </div>
 
   <!-- PICK -->
-
   <div class="screen" id="screen-pick">
     <button class="back-btn" id="btn-back-pick">← terug</button>
     <div style="font-family: 'Oswald', sans-serif; font-size: 22px; color: #ddd8ce; margin-bottom: 20px;">Welke oefening?</div>
@@ -89,7 +82,6 @@
   </div>
 
   <!-- AMOUNT -->
-
   <div class="screen" id="screen-amount">
     <button class="back-btn" id="btn-back-amount">← terug</button>
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
@@ -112,8 +104,7 @@
     <div id="quick-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
   </div>
 
-<button class="fab" id="fab">+ SCORE TOEVOEGEN</button>
-
+  <button class="fab" id="fab">+ SCORE TOEVOEGEN</button>
 </div>
 
 <script>
@@ -384,6 +375,5 @@
   renderPick();
   renderHome();
 </script>
-
 </body>
 </html>
